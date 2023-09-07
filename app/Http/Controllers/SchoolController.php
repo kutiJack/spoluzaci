@@ -402,7 +402,7 @@ array_push($counts, $count);
 }
 
 
-array_push($details, $years);
+array_push($details,  $years);
 
 array_push($details, $counts);
 

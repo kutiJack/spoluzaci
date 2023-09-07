@@ -247,17 +247,17 @@ user_id=auth.user.id;
 
     // naplní select ročníky pro danou školu
     const fillYears=()=>{
-alert('fill')
+
 
         let listbox=document.getElementById("years_select")
 
 listbox.innerHTML=''
 
-for(const [index, item] of schoolData.schooldetails.entries())
+for(const [index, item] of schoolData.years.entries())
 
             {
 
-console.log('years ................ ',item)
+
 
                 var el = document.createElement("option");
 
@@ -267,13 +267,17 @@ console.log('years ................ ',item)
                 el.setAttribute('id', year_id)
 
                 var count = '';
-               // if(schoolData.schooldetails.i !='0') {
-                  //  count = schoolData[1][index];
 
-                    //el.text = item.year + ' (' + count + ')';
+                //pokud má ročník zaregistrované třídy, uveď jejich počet vedle ročníku
+                if(schoolData.count[index]>0) {
+                    count = schoolData.count[index];
 
-               // }
-               // else
+                    el.text = item.year + ' (' + count + ')';
+
+                }
+               else
+
+                   // jinak zobraz pouze ročník
                     el.text = item.year
 
                 el.value = item.year;
@@ -430,8 +434,8 @@ const nodes = listbox.childNodes
 
                 if(response) {
 
-console.log('schooldetails....... ', response.data)
-                    setSchoolData(prevState=>{return {...prevState,  schooldetails: response.data}})
+console.log('response data .... ', response.data)
+                    setSchoolData(prevState=>{return {...prevState, years:response.data[0], count:response.data[1],  schooldetails: response.data.schooldetails}})
 
 
 

@@ -150,7 +150,7 @@ const location = useLocation();
         // nastav název školy do state, aby ho mohl převzít link na detail dané školy...
      //   setFullname(prevState => {return {fullname: e.target.value}})
 
-setSchoolData(prevState=>{return {school_id:id, fullname: e.target.value}})
+setSchoolData(prevState=>{return {...prevState, school_id:id, fullname: e.target.value}})
 
     }
 
