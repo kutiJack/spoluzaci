@@ -1,0 +1,8 @@
+.message_container {border:1px solid gray; border-radius:5px; padding:0px !important; padding-bottom: 8px !important; margin-bottom: 8px;}
+#message_title{background:#ccffe5; padding:8px;}
+#message_content{height:50px;}
+#message_bottom{}
+
+#message_bottom span{cursor:pointer;  }
+
+#message_react{height:70px; margin-bottom:120px}

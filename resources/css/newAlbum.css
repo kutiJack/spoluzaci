@@ -1,0 +1,5 @@
+#newAlbum_container{margin-bottom: 25px;}
+
+#newAlbum_container input[type="text"]{height:23px;}
+#newAlbum_container button{margin-top:10px; height:27px; border:1px solid gray; border-radius: 4px; font-size:0.7em}
+#hide_newAlbum_Dialog{font-size:0.8em; margin-top:12px; margin-bottom: 10px; cursor:pointer; text-decoration: underline;}

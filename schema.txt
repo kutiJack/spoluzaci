@@ -1,0 +1,36 @@
+SchoolController.php
+
+public function getDetail(Request $request)
+
+vrací:
+
+schooldetails:  - city
+                - district
+                - fullname
+                - atd.
+
+ years: - seznam ročníků, zaregistrovaných pro danou školu
+
+ count: - počet tříd, zaregistrovaných v dané škole pro daný ročník
+
+
+ přijímá:
+ Detail.jsx
+
+  useEffect(()=> {
+          const  res =  axios.post(url + "/getDetail", {school_id: school_id})
+
+
+****************************************************************************************
+SchoolController.php
+public function getSchools(Request $request)
+
+vrací:
+
+id, fullname, district, city
+
+přijímá:
+School.jsx
+async function getSchools(e)
+
+********************************************************************************************

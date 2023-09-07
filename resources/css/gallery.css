@@ -1,0 +1,8 @@
+#gallery_container li {margin-left:15px; color:rgba(23,51,83,0.66);font-size:0.8em}
+#gallery_container li:before{content: '| '}
+
+#album_back_li{color:wheat; font-size:0.7em}
+#album_back_li:before{content: ''}
+
+
+#new_album{font-size:0.7em; cursor:pointer; margin:10px; padding:8px; border:1px solid gray; border-radius: 4px;}

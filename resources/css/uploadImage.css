@@ -1,0 +1,37 @@
+#uploadImage_container{
+
+
+    height:200px;
+
+}
+
+
+#uploadImage_container select{
+    width:120px;
+    height:30px;
+    font-size:12px;
+    margin-left:15px;
+    cursor:pointer;
+}
+
+#uploadImage_container label{
+    font-size:12px;
+    cursor:pointer;
+
+}
+
+#uploadImage_container input[type='submit']{
+border: 1px solid gray;
+    border-radius: 4px;
+
+
+
+}
+
+#selected_files{height:25px; margin-top:15px; }
+#selected_files li{margin-left:25px;display:inline-block;}
+
+
+#albums_list li {display:inline-block}
+
+
