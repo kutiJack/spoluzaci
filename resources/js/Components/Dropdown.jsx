@@ -1,25 +1,24 @@
-import React, { useState, useContext, Fragment } from 'react';
-import { Link } from '@inertiajs/inertia-react';
-import { Transition } from '@headlessui/react';
+import React, {useState, useContext, Fragment} from 'react';
+import {Link} from '@inertiajs/inertia-react';
+import {Transition} from '@headlessui/react';
 
 const DropDownContext = React.createContext();
 
-const Dropdown = ({ children }) => {
+const Dropdown = ({children}) => {
     const [open, setOpen] = useState(false);
-
     const toggleOpen = () => {
         setOpen((previousState) => !previousState);
     };
 
     return (
-        <DropDownContext.Provider value={{ open, setOpen, toggleOpen }}>
+        <DropDownContext.Provider value={{open, setOpen, toggleOpen}}>
             <div className="relative">{children}</div>
         </DropDownContext.Provider>
     );
 };
 
-const Trigger = ({ children }) => {
-    const { open, setOpen, toggleOpen } = useContext(DropDownContext);
+const Trigger = ({children}) => {
+    const {open, setOpen, toggleOpen} = useContext(DropDownContext);
 
     return (
         <>
@@ -30,8 +29,8 @@ const Trigger = ({ children }) => {
     );
 };
 
-const Content = ({ align = 'right', width = '48', contentClasses = 'py-1 bg-white', children }) => {
-    const { open, setOpen } = useContext(DropDownContext);
+const Content = ({align = 'right', width = '48', contentClasses = 'py-1 bg-white', children}) => {
+    const {open, setOpen} = useContext(DropDownContext);
 
     let alignmentClasses = 'origin-top';
 
@@ -70,7 +69,7 @@ const Content = ({ align = 'right', width = '48', contentClasses = 'py-1 bg-whit
     );
 };
 
-const DropdownLink = ({ href, method = 'post', as = 'a', children }) => {
+const DropdownLink = ({href, method = 'post', as = 'a', children}) => {
     return (
         <Link
             href={href}

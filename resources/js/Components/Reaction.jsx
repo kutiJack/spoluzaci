@@ -1,25 +1,11 @@
-import { useForm } from "react-hook-form";
+import {useForm} from "react-hook-form";
 
-const Reaction = ()=>{
-
-
-
-
+const Reaction = () => {
     return (
         <>
-
-
-
-
-
-
-
-
 
         </>
     )
 }
 
-
-
-export default  Reaction;
+export default Reaction;

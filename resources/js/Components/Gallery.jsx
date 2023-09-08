@@ -1,63 +1,58 @@
 import Atom_auth from "@/Atoms/Atom_auth";
 import {useLocation, useParams, useNavigate, Link} from "react-router-dom";
-import { useRecoilState } from "recoil";
+import {useRecoilState} from "recoil";
 import ImageGallery from 'react-image-gallery';
-import  '../../css/image-gallery.css'
+import '../../css/image-gallery.css'
 import '../../css/gallery.css'
 import React, {useState, useEffect} from 'react'
 import UploadImage from "@/Components/UploadImage";
 import NewAlbum from "@/Components/NewAlbum";
 
 
-
-const Gallery = ()=>{
-    const url= import.meta.env.VITE_APP_URL
+const Gallery = () => {
+    const url = import.meta.env.VITE_APP_URL
     const [auth, setAuth] = useRecoilState(Atom_auth)
-    const[myClassButtonVisible, setMyClassButtonVisible]=useState(true)
-    const[uploadImageVisible, setUploadImageVisible] = useState(false)
-    const [imagepaths, setImagepaths]=useState([])
+    const [myClassButtonVisible, setMyClassButtonVisible] = useState(true)
+    const [uploadImageVisible, setUploadImageVisible] = useState(false)
+    const [imagepaths, setImagepaths] = useState([])
     const [albums, setAlbums] = useState([])
-    const[newAlbumVisible, setNewAlbumVisible] = useState(false)
+    const [newAlbumVisible, setNewAlbumVisible] = useState(false)
     const location = useLocation();
 
 
+    // provizorní konstanta, nahradit funkcí, která vrací true, pokud už je třída uložena do Moje třídy...
+    const checkmyclasses = true;
+    const prefix = "http://localhost/spoluzaci/resources/img/gallery/"
 
-  // provizorní konstanta, nahradit funkcí, která vrací true, pokud už je třída uložena do Moje třídy...
-const checkmyclasses = true;
-    const prefix="http://localhost/spoluzaci/resources/img/gallery/"
+    let owner = ''
+    auth.user != null && auth.user.name != null ? owner = auth.user.name : owner = '';
+    const school_id = location.state.school_id;
+    const class_id = location.state.class_id;
+    const class_name = location.state.class_name;
+    const year = location.state.year;
+    const school_name = location.state.school_name;
 
-    let owner=''
-    auth.user !=null && auth.user.name !=null ? owner=auth.user.name : owner='';
-const school_id=location.state.school_id;
-const class_id=location.state.class_id;
-const class_name=location.state.class_name;
-const year=location.state.year;
-const school_name=location.state.school_name;
-
-let images=[]
-
+    let images = []
 
 
-
-useEffect(()=>{
-
-
-    // pokud není nikdo přihlášený, je owner prázdný řetězec...
-    getPhotos(0, class_id, owner);
-    getAlbums();
-
-}, [])
+    useEffect(() => {
 
 
-function hideNewAlbumDialog()
-{
-    setNewAlbumVisible(false)
-}
+        // pokud není nikdo přihlášený, je owner prázdný řetězec...
+        getPhotos(0, class_id, owner);
+        getAlbums();
 
-    function getAlbums(){
+    }, [])
 
 
-        axios.post(url + '/getAlbums', {owner:owner,class_id:class_id}).then((res)=>{
+    function hideNewAlbumDialog() {
+        setNewAlbumVisible(false)
+    }
+
+    function getAlbums() {
+
+
+        axios.post(url + '/getAlbums', {owner: owner, class_id: class_id}).then((res) => {
 
             setAlbums(res.data);
 
@@ -67,43 +62,35 @@ function hideNewAlbumDialog()
     }
 
 
+    function getPhotos(album_id, class_id, owner) {
+        let array = []
 
-function getPhotos(album_id, class_id, owner)
-{
-let array=[]
+        axios.post(url + '/getPhotos', {album_id: album_id, class_id: class_id, owner: owner}).then((res) => {
 
-    axios.post(url + '/getPhotos', {album_id:album_id, class_id:class_id,owner:owner}).then((res)=>{
+            const arr = res.data;
+            const newarr = arr.map((item) => {
 
-        const arr=res.data;
-const newarr = arr.map((item)=>{
+                let path = url + '/' + item;
 
-    let path= url + '/' + item;
-
-   return {original:path, thumbnail:path}
+                return {original: path, thumbnail: path}
 
 
+            })
 
 
-})
+            setImagepaths(newarr)
 
 
-
-setImagepaths(newarr)
-
+        })
 
 
-
-    })
-
-
-}
+    }
 
 
-function _renderThumbInner(item)
-{
-return (
+    function _renderThumbInner(item) {
+        return (
 
-    <span className="image-gallery-thumbnail-inner">
+            <span className="image-gallery-thumbnail-inner">
 
         <img
             className="image-gallery-thumbnail-image"
@@ -115,87 +102,85 @@ return (
             loading={item.thumbnailLoading}
 
         />
-        {
-            item.thumbnailLabel && (
-                <div className="image-gallery-thumbnail-label">
-                    {item.thumbnailLabel}
-                </div>
-            )
-        }
-        <div>bottom</div>
+                {
+                    item.thumbnailLabel && (
+                        <div className="image-gallery-thumbnail-label">
+                            {item.thumbnailLabel}
+                        </div>
+                    )
+                }
+                <div>bottom</div>
       </span>
-)
+        )
 
-}
+    }
 
 
 // po kliknutí na název alba zobrazí fotky, které jsou do alba přiřazeny...
-function handle_album_click(e)
-{
+    function handle_album_click(e) {
 
 
+    }
 
-
-
-}
-
-    function showUpload()
-    {
+    function showUpload() {
 
         setUploadImageVisible(true);
     }
 
-    function hideUpload()
-    {
+    function hideUpload() {
 
         // vyčistí seznam uploadovaných souborů...
-const elem=document.getElementById('selected_files');
-elem.innerHTML=""
+        const elem = document.getElementById('selected_files');
+        elem.innerHTML = ""
         setUploadImageVisible(false);
     }
 
-function enrollToClass()
-{
+    function enrollToClass() {
 
-}
+    }
 
-function addToMyClasses()
-{
+    function addToMyClasses() {
 
 
-}
+    }
 
 
-
-
-
-
-    return(
+    return (
         <div id={'gallery_container'} className={'col-12 row justify-content-center '}>
 
             <div className='col-12 row justify-content-center' id='class_detail_container '>
 
 
-
-
-
-                <div className="col-11 row justify-content-center" id="class_detail_header_container"  >
+                <div className="col-11 row justify-content-center" id="class_detail_header_container">
 
                     {
                         // první sloupec
 
                     }
-                    <div className='floatleft  d-flex align-items-end flex-column justify-content-start ' style={{width:'120px', paddingBottom:'10px'}}>
+                    <div className='floatleft  d-flex align-items-end flex-column justify-content-start '
+                         style={{width: '120px', paddingBottom: '10px'}}>
 
 
-                        <Link   to={`/detail` } state={{auth:auth, school_id:school_id, class_id:class_id, school_name:school_name, year:year, }}
-                                className=' back_links col-12 mt-auto d-flex align-items-center  '> Do školy...</Link>
+                        <Link to={`/detail`} state={{
+                            auth: auth,
+                            school_id: school_id,
+                            class_id: class_id,
+                            school_name: school_name,
+                            year: year,
+                        }}
+                              className=' back_links col-12 mt-auto d-flex align-items-center  '> Do školy...</Link>
 
-                        <Link   to={`/classDetail` } state={{auth:auth, school_id:school_id, class_id:class_id, class_name:class_name, school_name:school_name, year:year, }}
-                                className=' back_links col-12 mt-auto d-flex align-items-center  '> Do třídy...</Link>
+                        <Link to={`/classDetail`} state={{
+                            auth: auth,
+                            school_id: school_id,
+                            class_id: class_id,
+                            class_name: class_name,
+                            school_name: school_name,
+                            year: year,
+                        }}
+                              className=' back_links col-12 mt-auto d-flex align-items-center  '> Do třídy...</Link>
 
                     </div>
-
 
 
                     {
@@ -203,44 +188,42 @@ function addToMyClasses()
 
                     }
 
-                    <div className='justify-content-center col-10'  >
-                        <div id="class_detail_header_year_class_div" className="col-11  row text-center justify-content-center"  >
+                    <div className='justify-content-center col-10'>
+                        <div id="class_detail_header_year_class_div"
+                             className="col-11  row text-center justify-content-center">
                             {class_name}
                             <span
-                                className="text-center" style={{marginTop: "12px", width: "55px", fontSize:"18px"}}>ročník
+                                className="text-center" style={{marginTop: "12px", width: "55px", fontSize: "18px"}}>ročník
                     </span>
                             <span
-                                className="text-center" style={{marginTop: "12px",width: "50px",fontSize: "18px"}}>{year}
+                                className="text-center"
+                                style={{marginTop: "12px", width: "50px", fontSize: "18px"}}>{year}
                         </span>
-
-
 
 
                         </div>
 
-                        <div id="class_detail_header_schoolname_div" style={{fontSize: '22px'}}  className="col-11 text-center ">{school_name}</div>
+                        <div id="class_detail_header_schoolname_div" style={{fontSize: '22px'}}
+                             className="col-11 text-center ">{school_name}</div>
 
 
-
-                        <div className='col-11 row justify-content-center mt-2' style={{height: '35px'}} >
-
+                        <div className='col-11 row justify-content-center mt-2' style={{height: '35px'}}>
 
 
-                            {auth.user !=null
+                            {auth.user != null
 
                                 ?
 
-                                uploadImageVisible==false ?
-                                <div onClick={showUpload}  className=" col-2 text-center" id="class_detail_header_enroll_div">Nahrát foto</div>
+                                uploadImageVisible == false ?
+                                    <div onClick={showUpload} className=" col-2 text-center"
+                                         id="class_detail_header_enroll_div">Nahrát foto</div>
                                     :
-                                    <div onClick={hideUpload}  className=" col-2 text-center" id="class_detail_header_enroll_div">Ukončit nahrávání</div>
-
-
+                                    <div onClick={hideUpload} className=" col-2 text-center"
+                                         id="class_detail_header_enroll_div">Ukončit nahrávání</div>
 
 
                                 :
                                 null}
-
 
 
                         </div>
@@ -252,9 +235,6 @@ function addToMyClasses()
                     }
 
 
-
-
-
                 </div>
 
 
@@ -264,7 +244,8 @@ function addToMyClasses()
 
                 {newAlbumVisible == true ?
                     <div onClick={() => hideNewAlbumDialog()}
-                    id={'hide_newAlbum_Dialog'}     className={'col-1 d-flex align-items-center justify-content-center  '}>Skrýt dialog</div>
+                         id={'hide_newAlbum_Dialog'}
+                         className={'col-1 d-flex align-items-center justify-content-center  '}>Skrýt dialog</div>
 
                     :
 
@@ -276,67 +257,53 @@ function addToMyClasses()
                 }
 
 
-
-                {newAlbumVisible==true? <NewAlbum class_id={class_id} owner={owner} /> :null}
-
+                {newAlbumVisible == true ? <NewAlbum class_id={class_id} owner={owner}/> : null}
 
 
-                {albums.length>0 ?
+                {albums.length > 0 ?
 
-<div className={'col-12 row justify-content-center'}>
+                    <div className={'col-12 row justify-content-center'}>
 
-    <div className={'col-1 text-center'} style={{color:"rgba(23,51,83,0.66)", fontSize:"1.2em"}}>Alba</div>
+                        <div className={'col-1 text-center'}
+                             style={{color: "rgba(23,51,83,0.66)", fontSize: "1.2em"}}>Alba
+                        </div>
 
-                    <ul className={'col-12'}  id={'albums_list'}>
+                        <ul className={'col-12'} id={'albums_list'}>
 
-                        <li className={'back_links'} id={'album_back_li'}><span onClick={()=>getPhotos(0, class_id, owner)} >Zpět</span></li>
-                        { albums.map((item)=>{
+                            <li className={'back_links'} id={'album_back_li'}><span
+                                onClick={() => getPhotos(0, class_id, owner)}>Zpět</span></li>
+                            {albums.map((item) => {
 
-                            return  <li onClick={()=>getPhotos(item.id, class_id, owner)} id={item.id}>{item.description}</li>
+                                return <li onClick={() => getPhotos(item.id, class_id, owner)}
+                                           id={item.id}>{item.description}</li>
 
-                        })}
+                            })}
 
 
-                    </ul>
-</div>
-                    :null
+                        </ul>
+                    </div>
+                    : null
 
 
                 }
-            <ul className={'col-12'}  id={'selected_files'}></ul>
-
-
+                <ul className={'col-12'} id={'selected_files'}></ul>
 
 
             </div>
 
 
-            {uploadImageVisible == true &&  auth.user !=null?
+            {uploadImageVisible == true && auth.user != null ?
 
-    <div className={'col-12 row justify-content-center '}>
-                <UploadImage  owner={auth.user.name} class_id={class_id}  />
-    </div>
-
-                :null}
-
-            {imagepaths.length>0 ?
-                <div className={'mt-5'}>
-                <ImageGallery  items={imagepaths} showNav={false} renderThumbInner={_renderThumbInner}/>
+                <div className={'col-12 row justify-content-center '}>
+                    <UploadImage owner={auth.user.name} class_id={class_id}/>
                 </div>
                 : null}
 
-
-
-
-
-
-
-
-
-
-
-
-
+            {imagepaths.length > 0 ?
+                <div className={'mt-5'}>
+                    <ImageGallery items={imagepaths} showNav={false} renderThumbInner={_renderThumbInner}/>
+                </div>
+                : null}
         </div>
     )
 }
