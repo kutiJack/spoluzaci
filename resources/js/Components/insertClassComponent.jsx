@@ -6,15 +6,17 @@ import { useForm } from "react-hook-form";
 import {useRecoilState} from "recoil";
 
 import Atom_insertClassVisible from "../Atoms/Atom_insertClassVisible";
-
+import Atom_schoolData from "../Atoms/Atom_schoolData";
 
 const InsertClass=(props)=>{
     const navigate = useNavigate();
     const [addClassVisible, setAddClassVisible] = useRecoilState(Atom_insertClassVisible);
-    const year_id=props.year_id;
-    const year=props.year;
+    const [schoolData,setSchoolData ] = useRecoilState(Atom_schoolData)
 
-    const school_id=props.school_id;
+    const year_id=schoolData.year_id;
+    const year=schoolData.year;
+    const school_id=schoolData.school_id
+
     const { register, handleSubmit, watch, formState: { errors } } = useForm();
 
     const url= import.meta.env.VITE_APP_URL
@@ -65,33 +67,12 @@ const InsertClass=(props)=>{
 
                     info.innerText = "Třída byla úspěšně přidána"
 
-                    let arr= Array.from(props.schooldata[1]);
-
-let count = parseInt(arr[props.index]);
-
-                    count++;
-
-                   arr[props.index]=count;
-
-
-props.setStateFn(arr, 1)
+props.updateClassListbox(class_id, class_name)
 
 
 
 
 
-                    // rovnou vlož nově přidanou třídu do selektu
-            /*        let listbox = document.getElementById("class_select")
-                    var el = document.createElement("option");
-                    el.setAttribute('id', class_id)
-                    el.addEventListener('click', props.fillMembers)
-
-                    el.text = document.getElementById('class').value
-                    el.value = el.text
-
-
-                    listbox.add(el);
-                    document.getElementById('class').value = ''*/
                 }
 
             } else {

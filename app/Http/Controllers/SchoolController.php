@@ -241,6 +241,7 @@ public function getClasses(Request $request)
 $year_id=$request->input('year_id');
 $school_id=$request->input('school_id');
 
+
 $classes=Classes::where('year_id', $year_id)->where('school_id', $school_id)->get(); //{ "id": 5,  "school_id": 191,  "year_id": 3,  "year": null,  "class": "5. A"}
 
 foreach($classes as $class)
@@ -256,7 +257,7 @@ $class['class'] .= ' (' . $count . ')';
 
 }
 
-
+Log::info('school id ' . $school_id . ' year id ' . $year_id . ' classes ' . $classes);
 
 return $classes;
 
@@ -495,7 +496,7 @@ $school_id =  $request->input('school_id');
 $result = Year::select(['year'])->where('school_id', $school_id)->where('year', $year)->get();
 
    // pokud dotaz ročník nenašel, může být přidán
-
+Log::info('school_id je ' .  $school_id . ' year je ' .  $year . ' vysledek dotazu je ' . $result);
 if($result->isEmpty())
 {
 

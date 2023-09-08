@@ -6,15 +6,19 @@ import { useForm } from "react-hook-form";
 import {useRecoilState} from "recoil";
 
 import Atom_insertYearVisible from "../Atoms/Atom_insertYearVisible";
+import Atom_schoolData from "../Atoms/Atom_schoolData";
+
 
 
 const InsertYear=(props)=>{
     const navigate = useNavigate();
     const [addYearVisible, setAddYearVisible] = useRecoilState(Atom_insertYearVisible);
-    const school_id=props.school_id;
+    const [schoolData,setSchoolData ] = useRecoilState(Atom_schoolData)
 
     const { register, handleSubmit, watch, formState: { errors } } = useForm();
     const url= import.meta.env.VITE_APP_URL
+
+
 
     function handleDblClick(e)
     {
@@ -39,12 +43,10 @@ const InsertYear=(props)=>{
 
     const onSubmit = async (data) => {
 
+let year = document.getElementById('year').value
 
 
-
-        data.school_id=school_id;
-
-         axios.post(url + '/insertYear', {school_id:school_id, year:data.year}, {withCredentials:true}).then((res)=>{
+         axios.post(url + '/insertYear', {school_id:schoolData.school_id, year:year}, {withCredentials:true}).then((res)=>{
 
 
              let info = document.getElementById("info");
@@ -52,6 +54,7 @@ const InsertYear=(props)=>{
 
 
              if(res.data) {
+
                  if(res.data=='exists')
 
                  {
@@ -65,28 +68,16 @@ const InsertYear=(props)=>{
 
                      const year_id =  res.data
 
-                    props.schooldata.push({id:year_id, school_id:school_id, year:data.year});
 
 
-                    props.setStateFn(props.schooldata, 0);
+
+                   props.updateYearsListbox(year_id, year);
 
                      info.setAttribute('style', 'color:green')
                      info.innerText = "Ročník byl úspěšně přidán"
 
 
-                     // rovnou vlož nově přidaný ročník do selectu
-                   /*  let listbox = document.getElementById("years_select")
-                     var el = document.createElement("option");
-                     el.setAttribute('id', year_id)
 
-                     el.addEventListener('click', props.fillClasses)
-
-                     el.text = document.getElementById('year').value
-                     el.value = el.text
-
-
-                     listbox.add(el);
-                     document.getElementById('year').value = ''*/
 
 
 

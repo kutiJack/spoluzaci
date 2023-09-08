@@ -43,26 +43,50 @@ const  Detail=()=>{
     const navigate = useNavigate();
 
 
-const setStateFn= (data, flag)=>{
-
- if(flag==0)
-setSchoolData(currentdata=>{return {...currentdata, 0:data}})
-
-    if(flag=1) {
-
-        setSchoolData(currentdata => {
-
-            return {...currentdata, 1: data}
-        })
+const updateYearsListbox= (year_id, year)=>{
 
 
-    }
+    let listbox=document.getElementById("years_select")
+
+
+
+let arr=Array.from(schoolData.years)
+
+arr.push({id:year_id, school_id:schoolData.school_id,year:year})
+
+  setSchoolData(actualState=>{return {...actualState, years: arr}})
+
+
+
+
+
+
 
 
 
   }
 
 
+const updateClassListbox= (class_id, class_name)=>{
+
+
+        let listbox=document.getElementById("class_select")
+
+        let arr=Array.from(schoolData.classes)
+
+        arr.push({id:class_id, school_id:schoolData.school_id, year_id:schoolData.year_id, class:class_name})
+
+    setSchoolData(actualState=>{return {...actualState, classes: arr}})
+
+fillClasses()
+
+
+
+
+
+
+
+    }
 
     let user_name=null;
     let user_id=null;
@@ -253,6 +277,8 @@ user_id=auth.user.id;
 
 listbox.innerHTML=''
 
+
+
 for(const [index, item] of schoolData.years.entries())
 
             {
@@ -341,42 +367,53 @@ const nodes = listbox.childNodes
     // po vybrání ročníku vyplní druhý select seznamem registrovaných tříd pro daný ročník
     const fillClasses=(e)=>{
 
-      const element = e.target;
-         setIndex([...element.parentElement.children].indexOf(element));
 
-      document.getElementById("empty_class_div").innerText=''
+        let year_id=-1
+
+
+    //pro záskání tříd pro daný ročník potřebujeme poslat kromě school_id také year_id
+
+    // year_id získáme buď z kliknutého ročníku, kde je uloženo jako id daného elementu
+
+    // nebo pokud voláme fillClasses z funkce updateClassListbox (tj. bez kliknutí na ročník), tak ho získáme ze schoolData.year_id
+
+        if(e) {
+
+             year_id=e.target.getAttribute('id')
+
+            setSchoolData(actualState => { return {...actualState, year_id: year_id}      })
+
+
+        }
+        else
+            year_id=schoolData.year_id;
+
+
+       document.getElementById("class_select").innerHTML=''
         let members_div=document.getElementById("members_div")
 
 
 
-        year = element.innerText
+
 
         members_div.innerHTML=''
 
 
         let yearsselect=document.getElementById("years_select")
 
-       year_id=yearsselect.options[yearsselect.selectedIndex].getAttribute('id');
 
-
-
-      setSchoolData(actualState=>{return {...actualState,year_id: year_id, year:year}})
 
        const  res =  axios.post(url + "/getClasses", {year_id: year_id, school_id: schoolData.school_id}).then(
            (response)=>
            {
 
-
-
                if(response) {
 
-
-
+                   setSchoolData(actualState=>{return {...actualState, classes: response.data}})
 
                    let listbox=document.getElementById("class_select")
 
                    listbox.innerHTML=''
-
 
                    if(listbox.childNodes.length==0)
 
@@ -411,21 +448,32 @@ const nodes = listbox.childNodes
 
 
 
-        //sortSelect(listbox)
+
 
     }
 
 
 
 
+    // Při zobrazení detailu školy (včetně návratu na detail školy z detailu třídy) vyplň listbox se zaregistrovanými ročníky dané školy
+useEffect(()=>{
+
+    Array.isArray(schoolData.schooldetails) ? fillYears() :null
+}, [schoolData.years])
 
 
 
-    let fullname='fullllllllllllll'
 
 
 
-    useEffect(()=> {
+
+
+
+
+
+
+
+useEffect(()=> {
 
 
         const  res =  axios.post(url + "/getDetail", {school_id: schoolData.school_id}).then(
@@ -434,29 +482,16 @@ const nodes = listbox.childNodes
 
                 if(response) {
 
-console.log('response data .... ', response.data)
-                    setSchoolData(prevState=>{return {...prevState, years:response.data[0], count:response.data[1],  schooldetails: response.data.schooldetails}})
 
+                    setSchoolData(prevState=>{return {...prevState, years:response.data[0], count:response.data[1],  schooldetails: response.data.schooldetails}})
 
 
                 }
 
             }, [class_id])
 
-
-
         setIsYearVisible(false)
         setIsClassVisible(false)
-
-
-
-
-
-
-
-
-
-
 
     },[]);
 
@@ -508,67 +543,22 @@ console.log('response data .... ', response.data)
                     </div>
                 </div>: null}
 
-
-
-
-
-
                 <div id="years_class_members_container" className="row col-12"    >
 
-
                     <div id="years_container" className="col-3"  >
-
                         <div id="years_select_div"   className="col-12  text-center " >
-
-
                                 <button onClick={handleAddYearVisible} className="col-12 mb-3 " style={{color: "black" ,background: "#77D794", padding: "8px", borderRadius: "4px"}} >Přidat ročník</button>
-
-                            {  /*  <div className="col-12 mb-3 " style={{color: "black" ,background: "#77D794", padding: "8px", borderRadius: "4px"}} >Ročníky</div> */ }
-
-
-
-
-
-                            <select  id="years_select" size="14" className="col-12 text-start">
-
-                                { Array.isArray(schoolData.schooldetails) ? fillYears() :null}}
-                                }
-
-
-                            </select>
-
-
-
+                                <select  id="years_select" size="14" className="col-12 text-start "/>
                         </div>
                     </div>
-
-
 
 
                     <div id="class_container" className="col-3 " >
                         <div id="class_select_div"  className="col-12  text-center ">
-
-
-                                <button onClick={handleAddClassVisible} className="col-12 mb-3 " style={{color: "black" ,background: "#77D794", padding: "8px", borderRadius: "4px"}} >Přidat třídu</button>
-
-                            { /*  <div className="col-12 mb-3 " style={{color: "black" ,background: "#77D794", padding: "8px", borderRadius: "4px"}} >Třídy</div> */}
-
-
-
-
-
-                            <select  id="class_select" size="14" className="col-12 text-start">
-
-                            </select>
-
-
-
+                           <button onClick={handleAddClassVisible} className="col-12 mb-3 " style={{color: "black" ,background: "#77D794", padding: "8px", borderRadius: "4px"}} >Přidat třídu</button>
+                           <select  id="class_select" size="14" className="col-12 text-start"/>
                         </div>
-
-
                     </div>
-
-
 
                     <div id="members_container" className="col-5 row justify-content-center" >
                         <div id="members_header" className="col-12  text-center">
@@ -577,32 +567,12 @@ console.log('response data .... ', response.data)
                         <div id="empty_class_div" className="col-12" ></div>
                         <div id="members_div" className="col-12  " ></div>
 
-
-
-
-
-
-
                     </div>
 
-
-
-                </div>
-
-
-
-                <InsertClass school_id={school_id} setStateFn={setStateFn} index={index}  schooldata={schoolData} year_id={schoolData.year_id} year={year}   fillMembers={fillMembers} />
-
-               <InsertYear school_id={school_id} setStateFn={setStateFn} schooldata={schoolData[0]}  fillClasses={fillClasses } year_id={year_id}/>
-
-
+               </div>
+                <InsertClass  updateClassListbox={updateClassListbox} />
+                <InsertYear updateYearsListbox={updateYearsListbox} />
             </div>
-
-
-
-
-
-
 
         </>
 
@@ -611,3 +581,6 @@ console.log('response data .... ', response.data)
 }
 
 export default Detail
+
+
+

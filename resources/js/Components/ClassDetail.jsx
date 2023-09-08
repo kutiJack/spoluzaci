@@ -294,7 +294,7 @@ location.state !==null && location.state.class_id !=null ?  (setClass_id(locatio
                     <div className='floatleft  d-flex align-items-end flex-column justify-content-start ' style={{width:'120px', paddingBottom:'10px'}}>
 
 
-                        <Link   to={`/detail` } state={{auth:auth, school_id:school_id, class_id:class_id, school_name:school_name, year:year, }}
+                        <Link   to={`/detail` }
                                 className=' back_links col-12 mt-auto d-flex align-items-center  '> Do školy...</Link>
 
                     </div>

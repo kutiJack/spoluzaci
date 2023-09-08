@@ -120,11 +120,11 @@ const location = useLocation();
 
 
 
-                const id = item[1].id;
+                let school_id = item[1].id;
 
                 const school = item[1].fullname
                 var el = document.createElement("option");
-                el.setAttribute('id', id)
+                el.setAttribute('id', school_id)
                 el.text = i + ' ' +  school;
                 el.value = school;
 
@@ -142,15 +142,15 @@ const location = useLocation();
     {
 
 
-// výběrem školy získá id školy
-        const id=e.target.selectedOptions[0].getAttribute('id')
+// výběrem školy v listboxu získá id školy
+        let school_id=e.target.selectedOptions[0].getAttribute('id')
 
 
 
         // nastav název školy do state, aby ho mohl převzít link na detail dané školy...
      //   setFullname(prevState => {return {fullname: e.target.value}})
 
-setSchoolData(prevState=>{return {...prevState, school_id:id, fullname: e.target.value}})
+setSchoolData(prevState=>{return {...prevState, school_id:school_id, fullname: e.target.value}})
 
     }
 
