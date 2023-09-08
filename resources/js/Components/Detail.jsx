@@ -380,7 +380,6 @@ const nodes = listbox.childNodes
         if(e) {
 
              year_id=e.target.getAttribute('id')
-
             setSchoolData(actualState => { return {...actualState, year_id: year_id}      })
 
 
